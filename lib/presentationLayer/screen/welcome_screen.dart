@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:task03/blocs/nav_cubit_state.dart';
+import 'package:task03/blocs/Navbar_bloc/nav_cubit_state.dart';
 import 'package:task03/presentationLayer/screen/API/api.dart';
 import 'package:task03/presentationLayer/screen/firebase/firebase.dart';
 import 'package:task03/presentationLayer/screen/localHiveDB/localDB.dart';

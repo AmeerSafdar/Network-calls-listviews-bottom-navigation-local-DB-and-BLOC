@@ -1,6 +1,5 @@
-import 'package:equatable/equatable.dart';
 
-abstract class HiveEvent extends Equatable{
+abstract class HiveEvent{
   @override
   List<Object> get props => [];
 }

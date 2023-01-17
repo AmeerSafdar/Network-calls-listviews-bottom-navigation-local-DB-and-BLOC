@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_print
+// ignore_for_file: avoid_print, use_rethrow_when_possible
 
 import 'package:hive/hive.dart';
 
@@ -10,7 +10,7 @@ addData(String data) async{
     await listBox.add(data);
     
     } catch (e) {
-      print(e);
+     throw e;
     }
 }
 

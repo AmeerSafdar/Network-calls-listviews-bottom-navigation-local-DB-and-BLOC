@@ -2,11 +2,11 @@
 
 import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:task03/blocs/post_state.dart';
+import 'package:task03/blocs/states.dart';
 import 'package:task03/model/post_model.dart';
 import 'package:task03/repositories/post_repositry.dart';
 
-class PostCubit extends Cubit<PostState> {
+class PostCubit extends Cubit<ProductState> {
   PostCubit() : super( PostLoadingState() ) {
     fetchPosts();
   }
@@ -19,22 +19,18 @@ class PostCubit extends Cubit<PostState> {
       emit(PostLoadedState(posts));
     }
     on DioError catch(ex) {
-        emit( PostErrorState("Can't fetch posts, please check your internet connection!") );
+        emit( PostErrorState("Can't fetch posts, please check your internet connection! $ex") );
       
     }
   }
 
-  void searchPost(String SearchText) async{
+  void searchPost(String SearchText,List<PostModel> post) async{
     emit(PostSearchingState());
-    await Future.delayed(const Duration(seconds: 1));
     
-    List<PostModel> posts = await postRepository.fetchPosts();
+    List<PostModel> posts =post;
     List<PostModel> foundUser=[];
-    await Future.delayed(const Duration(seconds: 1));
 
     posts.forEach((PostModel p)=> p.title!.toLowerCase().contains(SearchText.toLowerCase())? foundUser.add(p): print('not founded'));
- 
-
     if (foundUser.length<0) {
       emit(PostSearchingState());
     } else {

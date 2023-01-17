@@ -2,12 +2,14 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:task03/blocs/product_firebase_bloc.dart';
-import 'package:task03/blocs/product_firebase_state.dart';
-import 'package:task03/blocs/products_firebase_events.dart';
-import 'package:task03/const/validation_helper.dart';
+import 'package:task03/blocs/firebase_bloc/product_firebase_bloc.dart';
+import 'package:task03/blocs/states.dart';
+import 'package:task03/blocs/firebase_bloc/products_firebase_events.dart';
+import 'package:task03/helper/extension/color_helper.dart';
+import 'package:task03/helper/extension/string_helper.dart';
+import 'package:task03/helper/extension/validation_helper.dart';
 import 'package:task03/model/product_model.dart';
-import 'package:task03/widget/input_field.dart';
+import 'package:task03/presentationLayer/widget/input_field.dart';
 
 class FirebaseScreen extends StatefulWidget {
   const FirebaseScreen({super.key});
@@ -19,6 +21,7 @@ class FirebaseScreen extends StatefulWidget {
 class _FirebaseScreenState extends State<FirebaseScreen> {
   final TextEditingController _nameController = TextEditingController();
   final _formGlobalKey = GlobalKey<FormState>();
+  final StringHelper _stringHelper=StringHelper();
 
   @override
   void initState() {
@@ -35,10 +38,10 @@ class _FirebaseScreenState extends State<FirebaseScreen> {
             child: Column(
               children: [
                 TextFieldWidget(
-                    hintText: 'Input Data',
+                    hintText: INPUT_DATA,
                     textEditingController: _nameController,
                     validator: (v) =>
-                        '$v'.isRequired() ? null : 'Input field is required'),
+                        '$v'.isRequired() ? null : REQ_FIELD),
                 SizedBox(
                   height: 5,
                 ),
@@ -53,7 +56,7 @@ class _FirebaseScreenState extends State<FirebaseScreen> {
                           _nameController.text='';
                         }
                       },
-                      child:state is ProductAdding ? CircularProgressIndicator(color: Color(0xffffff),):  Text('Add'),
+                      child:state is ProductAdding ? CircularProgressIndicator(color: K_White,):  _stringHelper.getStringText(ADD_TEXT),
                     );
                   },
                 ),
@@ -68,7 +71,7 @@ class _FirebaseScreenState extends State<FirebaseScreen> {
                     );
                   } else if (state is ProductError) {
                     return Center(
-                      child: Text('Eroor'),
+                      child: _stringHelper.getStringText('ERROR'),
                     );
                   }
                   if (state is ProductLoading) {
@@ -82,7 +85,7 @@ class _FirebaseScreenState extends State<FirebaseScreen> {
                         itemBuilder: ((_, index) {
                           return Card(
                             child: ListTile(
-                              title: Text("$index :- ${my_Data[index].name}"),
+                              title: _stringHelper.getStringText("$index :- ${my_Data[index].name}"),
                             ),
                           );
                         }));
