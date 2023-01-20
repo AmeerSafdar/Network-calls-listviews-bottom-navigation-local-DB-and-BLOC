@@ -1,11 +1,14 @@
-// ignore_for_file: prefer_const_constructors, library_private_types_in_public_api
+// ignore_for_file: prefer_const_constructors, library_private_types_in_public_api, unused_field
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task03/blocs/Navbar_bloc/nav_cubit_state.dart';
+import 'package:task03/helper/const/icon_helper.dart';
+import 'package:task03/helper/const/string_resource.dart';
 import 'package:task03/presentationLayer/screen/API/api.dart';
 import 'package:task03/presentationLayer/screen/firebase/firebase.dart';
 import 'package:task03/presentationLayer/screen/localHiveDB/localDB.dart';
+import 'package:task03/presentationLayer/widget/get_text.dart';
 
 class RootScreen extends StatefulWidget {
   const RootScreen({super.key});
@@ -15,35 +18,31 @@ class RootScreen extends StatefulWidget {
 }
 
 class _RootScreenState extends State<RootScreen> {
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Task3'),
+        title: TextWidget(txt:StringResources.TASK_3),
       ),
       bottomNavigationBar: BlocBuilder<NavigationCubit, NavigationState>(
         builder: (context, state) {
           return BottomNavigationBar(
             currentIndex: state.index,
             showUnselectedLabels: false,
-            items: const [
+            items:  [
               BottomNavigationBarItem(
-                icon: Icon(
-                  Icons.home,
-                ),
-                label: 'Firebase',
+                icon:
+                  IconHelper.HOME_ICON,
+                label: StringResources.FIREBASE,
               ),
               BottomNavigationBarItem(
-                icon: Icon(
-                  Icons.settings,
-                ),
-                label: 'API',
+                icon:IconHelper.SETTING_ICON,
+                label: StringResources.API,
               ),
               BottomNavigationBarItem(
-                icon: Icon(
-                  Icons.person,
-                ),
-                label: 'Local DB',
+                icon:IconHelper.PERSON_ICON,
+                label: StringResources.HIVE,
               ),
             ],
             onTap: (index) {

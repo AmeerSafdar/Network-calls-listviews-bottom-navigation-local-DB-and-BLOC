@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task03/blocs/hive_bloc/hive_bloc.dart';
 import 'package:task03/blocs/hive_bloc/hive_events.dart';
-import 'package:task03/blocs/states.dart';
-import 'package:task03/helper/extension/string_helper.dart';
+import 'package:task03/blocs/hive_bloc/hive_states.dart';
+import 'package:task03/helper/const/const.dart';
+import 'package:task03/helper/const/string_resource.dart';
+import 'package:task03/presentationLayer/widget/get_text.dart';
 import 'package:task03/presentationLayer/widget/input_field.dart';
 import 'package:task03/helper/extension/validation_helper.dart';
 
@@ -19,7 +21,6 @@ class LocalDBHive extends StatefulWidget {
 class _LocalDBHiveState extends State<LocalDBHive> {
   final TextEditingController _textEditingController = TextEditingController();
   final _formGlobalKey = GlobalKey<FormState>();
-  final StringHelper _stringHelper=StringHelper();
 
   @override
   void initState() {
@@ -31,49 +32,55 @@ class _LocalDBHiveState extends State<LocalDBHive> {
   Widget build(BuildContext context) {
     return Form(
       key: _formGlobalKey,
-      child: Column(
-        children: [
-          TextFieldWidget(
-              hintText: INPUT_DATA,
-              textEditingController: _textEditingController,
-              validator: (v) =>
-                  '$v'.isRequired() ? null : REQ_FIELD),
-          const SizedBox(
-            height: 5,
-          ),
-          BlocBuilder<HiveBloc, ProductState>(
-            builder: (context, state) {
-              return ElevatedButton(
-                  onPressed: () async {
-                    if (_formGlobalKey.currentState!.validate()) {
-                      BlocProvider.of<HiveBloc>(context)
-                          .add(AddData(_textEditingController.text));
-                      _textEditingController.text = '';
-                      await Future.delayed(const Duration(seconds: 1));
-                      BlocProvider.of<HiveBloc>(context).add(RetreiveData());
-                    }
-                  },
-                  child:  Text(ADD_TEXT));
-            },
-          ),
-          const SizedBox(
-            height: 8,
-          ),
-          Flexible(child: BlocBuilder<HiveBloc, ProductState>(
-            builder: (context, state) {
-              if (state is DataLoaded) {
-                return buildPostListView(state.myData);
-              } else if(state is DataAdding) {
-                return Center(child: CircularProgressIndicator(),);
-              }
-              else if(state is DataError){
-                return Center(child: _stringHelper.getStringText('ERROR'));
-              }
-              return Center(child: CircularProgressIndicator());
-             
-            },
-          ))
-        ],
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: K_PADDING,vertical: 5),
+        child: Column(
+          children: [
+            TextFieldWidget(
+                hintText: StringResources.INPUT_DATA,
+                textEditingController: _textEditingController,
+                validator: (v) =>
+                    '$v'.isRequired() ? null : StringResources.REQ_FIELD),
+            const SizedBox(
+              height: 10,
+            ),
+            BlocBuilder<HiveBloc, HiveStates>(
+              builder: (context, state) {
+                return ElevatedButton(
+                    onPressed: () async {
+                      if (_formGlobalKey.currentState!.validate()) {
+                        BlocProvider.of<HiveBloc>(context)
+                            .add(AddData(_textEditingController.text));
+                        _textEditingController.text = '';
+                        await Future.delayed(const Duration(seconds: 1));
+                        BlocProvider.of<HiveBloc>(context).add(RetreiveData());
+                      }
+                    },
+                    child:  Text(StringResources.ADD_TEXT));
+              },
+            ),
+            const SizedBox(
+              height: 15,
+            ),
+            Flexible(child: BlocBuilder<HiveBloc, HiveStates>(
+              builder: (context, state) {
+                if (state.status ==HiveStatus.success ) {
+                  if (state.posts.isEmpty) {
+                    return Center(child: TextWidget(txt:StringResources.NO_DATA ),);
+                  }
+                  return buildPostListView(state.posts);
+                } else if(state.status == HiveStatus.addingData || state.status == HiveStatus.initial ) {
+                  return Center(child: CircularProgressIndicator(),);
+                }
+                else if(state.status == HiveStatus.failure){
+                  return Center(child: TextWidget(txt:StringResources.ERROR_TEXT));
+                }
+                return Center(child: CircularProgressIndicator());
+               
+              },
+            ))
+          ],
+        ),
       ),
     );
   }
@@ -83,13 +90,12 @@ class _LocalDBHiveState extends State<LocalDBHive> {
       scrollDirection: Axis.vertical,
       itemCount: data.length,
       itemBuilder: (context, index) {
-
         return Padding(
           padding: const EdgeInsets.symmetric(vertical: 2),
           child: Card(
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 10),
-              child: _stringHelper.getStringText("$index:- ${data[index]}"),
+              child: TextWidget(txt:"$index:- ${data[index]}"),
             ),
           ),
         );

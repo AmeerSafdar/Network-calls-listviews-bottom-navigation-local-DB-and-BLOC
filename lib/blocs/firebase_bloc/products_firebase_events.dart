@@ -1,8 +1,5 @@
 
-abstract class ProductsEvent{
-  @override
-  List<Object> get props => [];
-}
+abstract class ProductsEvent{}
 
 class Create extends ProductsEvent{
   final String name;

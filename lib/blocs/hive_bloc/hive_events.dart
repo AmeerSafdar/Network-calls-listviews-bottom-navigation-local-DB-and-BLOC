@@ -1,8 +1,5 @@
 
-abstract class HiveEvent{
-  @override
-  List<Object> get props => [];
-}
+abstract class HiveEvent{}
 
 class AddData extends HiveEvent{
   final String name;

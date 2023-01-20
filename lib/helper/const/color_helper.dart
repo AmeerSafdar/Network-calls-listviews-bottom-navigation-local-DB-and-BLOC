@@ -2,5 +2,7 @@
 
 import 'package:flutter/material.dart';
 
-Color  K_red=Colors.red;
-Color  K_White=Colors.white;
+class ColorHelper{
+static Color  K_red=Colors.red;
+static Color  K_White=Colors.white;
+}
