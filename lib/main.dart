@@ -27,7 +27,8 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(providers: [
+    return MultiBlocProvider(
+      providers: [
       BlocProvider<NavigationCubit>(
       create: (context) => NavigationCubit(),),
       BlocProvider<PostCubit>(create: ((context) => PostCubit())),

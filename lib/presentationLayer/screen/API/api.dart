@@ -55,8 +55,7 @@ class _APiScreenState extends State<APiScreen> {
                     }),
                     hintText: StringResources.INPUT_DATA,
                     textEditingController: _textEditingController,
-                    validator: (v) =>
-                        '$v'.isRequired() ? null : StringResources.REQ_FIELD
+                    validator: (v) =>'$v'.isRequired() ? null : StringResources.REQ_FIELD
                         );
               },
             ),

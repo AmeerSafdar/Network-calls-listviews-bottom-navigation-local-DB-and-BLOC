@@ -1,6 +1,6 @@
 import 'package:task03/model/post_model.dart';
 
-enum PostStatus { initial, success, failure, searchError }
+enum PostStatus { initial, success, failure}
 
 class PostStates {
   const PostStates({
